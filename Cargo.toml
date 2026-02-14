@@ -4,3 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+tokio = { version = "1.49.0", features = ["rt-multi-thread", "macros"] }
+slint = "1.15.1"
+exif-oxide = "0.1"
+rfd = "0.17.2"
+anyhow = "1.0.101"
+thiserror = "2.0.18"
+
+[build-dependencies]
+slint-build = "1.15.1"

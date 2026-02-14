@@ -1,0 +1,80 @@
+import {
+    Button,
+    VerticalBox,
+    HorizontalBox,
+    StandardListView,
+    Palette,
+} from "std-widgets.slint";
+
+export component AppWindow inherits Window {
+    title: "Sintr Meta Stripper";
+    min-width: 500px;
+    min-height: 400px;
+
+    in property <[StandardListViewItem]> file_list: [];
+    in property <bool> is_processing: false;
+    in property <string> current_status: "Ready to clean";
+
+    // ------ Communication back to Rust -------
+    callback select_files_clicked();
+    callback start_cleaning_clicked();
+
+    VerticalBox {
+        padding: 20px;
+        spacing: 15px;
+
+        Text {
+            text: "Metadata Stripper";
+            font-size: 24px;
+            font-weight: 800;
+            horizontal-alignment: center;
+        }
+
+        Text {
+            text: "Selected Files:";
+            font-size: 14px;
+            color: gray;
+        }
+
+        // The central list showing paths
+        StandardListView {
+            model: root.file_list;
+            height: 200px;
+        }
+
+        // Status bar
+        Rectangle {
+            background: #f8f9fa;
+            border-radius: 4px;
+            height: 30px;
+            Text {
+                text: root.current_status;
+                color: root.is_processing ? #007bff : #28a745;
+                font-size: 13px;
+                vertical-alignment: center;
+                x: 10px;
+            }
+        }
+
+        // Action Buttons
+        HorizontalBox {
+            alignment: space-between;
+            Button {
+                text: "Select Files";
+                enabled: !root.is_processing;
+                clicked => {
+                    root.select_files_clicked()
+                }
+            }
+
+            Button {
+                text: "Clear Metadata";
+                primary: true;
+                enabled: !root.is_processing && root.file_list.length > 0;
+                clicked => {
+                    root.start_cleaning_clicked()
+                }
+            }
+        }
+    }
+}
